@@ -1,29 +1,44 @@
 {
   "expo": {
-    "name": "MySimpleRecipeApp",
-    "slug": "MySimpleRecipeApp",
+    "name": "Wisk",
+    "slug": "Wisk",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/mylogo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
+      "image": "./assets/splashscreen.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": "./assets/mylogo.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/mylogo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "icon": "./assets/mylogo.png",
+      "edgeToEdgeEnabled": true,
+      "package": "com.atharva7709.wisk"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font",
+      "expo-video"
+    ],
+    "extra": {
+      "GEMINI_API_KEY": "AIzaSyBPL3XZ5ANlA5JuHppEQ66iW_qmSHOBNWg",
+      "GOOGLE_VISION_API_KEY": "AIzaSyDmcPvqJYCm2NyAjifMMIFTrnZKX_UQcPU",
+      "eas": {
+        "projectId": "9c0680f9-fd5a-4278-86ef-dbb6bcc197c5"
+      }
+    },
+    "owner": "atharva7709"
   }
 }
