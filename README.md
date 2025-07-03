@@ -53,4 +53,4 @@ _Add screenshots here if available._
 - Powered by Google Gemini and Vision APIs
 
 ## License
-[MIT](LICENSE) 
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details. 
