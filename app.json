@@ -33,10 +33,10 @@
       "expo-video"
     ],
     "extra": {
-      "GEMINI_API_KEY": "AIzaSyBIqrg7qQzrrktdrP0GtxSX3UjC8DMTwpw",
-      "GOOGLE_VISION_API_KEY": "AIzaSyCBkatZ-kNk_iaLPVRcEkbD-ypawmzq1EI",
+      "GEMINI_API_KEY": "your api key",
+      "GOOGLE_VISION_API_KEY": "your api key",
       "eas": {
-        "projectId": "9c0680f9-fd5a-4278-86ef-dbb6bcc197c5"
+        "projectId": "your project id"
       }
     },
     "owner": "atharva7709"
