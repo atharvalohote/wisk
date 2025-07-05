@@ -1,16 +1,17 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 import TabNavigator from './navigation/TabNavigator';
-import { useColorScheme, Text } from 'react-native';
-import { useFonts as useAnonymousProFonts, AnonymousPro_400Regular } from '@expo-google-fonts/anonymous-pro';
-import { useFonts as useLexendFonts, Lexend_700Bold, Lexend_400Regular } from '@expo-google-fonts/lexend';
+import { useColorScheme, Text, Animated } from 'react-native';
+import { useFonts as useRubikBubblesFonts, RubikBubbles_400Regular } from '@expo-google-fonts/rubik-bubbles';
 import RecipeView from './screens/RecipeDialogScreen';
 import RecipeTextScreen from './screens/RecipeTextScreen';
 import WelcomeScreen from './components/WelcomeScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext, HapticsContext } from './Contexts';
+import AppColors from './AppColors';
+import { AppColorsDark } from './AppColors';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const [showWelcome, setShowWelcome] = useState(true);
+  const welcomeOpacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     (async () => {
@@ -29,38 +31,67 @@ export default function App() {
     })();
   }, []);
 
-  const paperTheme = isDark ? MD3DarkTheme : MD3LightTheme;
+  // Merge AppColors into the PaperProvider theme
+  const customLightTheme = {
+    ...MD3LightTheme,
+    colors: {
+      ...MD3LightTheme.colors,
+      ...AppColors,
+    },
+  };
+  const customDarkTheme = {
+    ...MD3DarkTheme,
+    colors: {
+      ...MD3DarkTheme.colors,
+      ...AppColorsDark,
+    },
+  };
+  const paperTheme = isDark ? customDarkTheme : customLightTheme;
   const navTheme = isDark ? DarkTheme : DefaultTheme;
 
-  // Load the fonts
-  const [anonLoaded] = useAnonymousProFonts({
-    AnonymousPro_400Regular,
+  // Load only Rubik Bubbles font
+  const [rubikLoaded] = useRubikBubblesFonts({
+    RubikBubbles_400Regular,
   });
-  const [lexendLoaded] = useLexendFonts({
-    Lexend_700Bold,
-    Lexend_400Regular,
-  });
-
-  if (!anonLoaded || !lexendLoaded) {
+  if (!rubikLoaded) {
     return <Text>Loading...</Text>;
   }
 
-  if (showWelcome) {
-    return <WelcomeScreen onFinish={() => setShowWelcome(false)} />;
-  }
+  // Fade out WelcomeScreen and unmount after animation
+  const handleWelcomeFinish = () => {
+    Animated.timing(welcomeOpacity, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => setShowWelcome(false));
+  };
 
   return (
     <ThemeContext.Provider value={{ isDark, setIsDark }}>
       <HapticsContext.Provider value={{ hapticsEnabled, setHapticsEnabled }}>
-    <PaperProvider theme={paperTheme}>
-      <NavigationContainer theme={navTheme}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="MainTabs" component={TabNavigator} />
-          <Stack.Screen name="RecipeView" component={RecipeView} />
+        <PaperProvider theme={paperTheme}>
+          <NavigationContainer theme={navTheme}>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="MainTabs" component={TabNavigator} />
+              <Stack.Screen name="RecipeView" component={RecipeView} />
               <Stack.Screen name="RecipeTextScreen" component={RecipeTextScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+            </Stack.Navigator>
+          </NavigationContainer>
+          {showWelcome && (
+            <Animated.View style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 999,
+              backgroundColor: 'transparent',
+              opacity: welcomeOpacity,
+            }}>
+              <WelcomeScreen onFinish={handleWelcomeFinish} />
+            </Animated.View>
+          )}
+        </PaperProvider>
       </HapticsContext.Provider>
     </ThemeContext.Provider>
   );

@@ -34,15 +34,18 @@ if (!GOOGLE_VISION_API_KEY) {
   ];
 
 function isFoodTerm(term: string): boolean {
-  // Only match if the term is an exact match (case-insensitive) to a food keyword
-  return FOOD_KEYWORDS.some(keyword => term.trim().toLowerCase() === keyword);
+  const lowerTerm = term.trim().toLowerCase();
+  return FOOD_KEYWORDS.some(keyword =>
+    lowerTerm === keyword ||
+    lowerTerm === keyword + 's' || // plural
+    lowerTerm.includes(keyword) ||
+    keyword.includes(lowerTerm)
+  );
 }
 
-export async function detectIngredientsFromImage(imageUri: string): Promise<string[]> {
+export async function detectIngredientsFromImage(imageUri: string): Promise<{ ingredients: string[], labels: string[] }> {
   try {
-    // Removed input imageUri log
     const base64 = await FileSystem.readAsStringAsync(imageUri, { encoding: FileSystem.EncodingType.Base64 });
-
     const body = {
       requests: [
         {
@@ -55,7 +58,6 @@ export async function detectIngredientsFromImage(imageUri: string): Promise<stri
         }
       ]
     };
-
     const response = await fetch(
       `https://vision.googleapis.com/v1/images:annotate?key=${GOOGLE_VISION_API_KEY}`,
       {
@@ -64,11 +66,10 @@ export async function detectIngredientsFromImage(imageUri: string): Promise<stri
         body: JSON.stringify(body)
       }
     );
-
     const result = await response.json();
-    // Removed all Vision API logging
+    // Debug log for full Vision API response
+    console.log('Vision API response:', JSON.stringify(result, null, 2));
     const detected = new Set<string>();
-
     // 1. OBJECT_LOCALIZATION
     const objects = result.responses?.[0]?.localizedObjectAnnotations || [];
     for (const obj of objects) {
@@ -76,7 +77,6 @@ export async function detectIngredientsFromImage(imageUri: string): Promise<stri
         detected.add(obj.name.charAt(0).toUpperCase() + obj.name.slice(1));
       }
     }
-
     // 2. LABEL_DETECTION
     const labels = result.responses?.[0]?.labelAnnotations || [];
     for (const label of labels) {
@@ -84,7 +84,6 @@ export async function detectIngredientsFromImage(imageUri: string): Promise<stri
         detected.add(label.description.charAt(0).toUpperCase() + label.description.slice(1));
       }
     }
-
     // 3. TEXT_DETECTION (OCR)
     const textAnnotations = result.responses?.[0]?.textAnnotations || [];
     if (textAnnotations.length > 0) {
@@ -96,12 +95,11 @@ export async function detectIngredientsFromImage(imageUri: string): Promise<stri
         }
       }
     }
-
     const detectedArray = Array.from(detected);
-    // Removed detected ingredients output log
-    return detectedArray;
+    // Collect all label descriptions (for display)
+    const allLabels = labels.map((l: any) => l.description ? l.description : '').filter(Boolean);
+    return { ingredients: detectedArray, labels: allLabels };
   } catch (error) {
-    // Removed Vision API error log
-    return [];
+    return { ingredients: [], labels: [] };
   }
 } 

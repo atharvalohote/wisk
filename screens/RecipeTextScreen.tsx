@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/Navigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+import FontFamilies from '../FontFamilies';
 
 const STORAGE_KEY = 'SAVED_RECIPES';
 
@@ -60,16 +61,16 @@ const RecipeTextScreen = () => {
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <Appbar.Header elevated>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Recipe" />
+        <Appbar.Content title="Recipe" titleStyle={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 26 }} />
       </Appbar.Header>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, flexGrow: 1 }}>
         <View style={{ backgroundColor: theme.colors.elevation.level2, borderRadius: 12, padding: 16 }}>
-          <Text style={{ fontFamily: 'Lexend_700Bold', fontSize: 26, marginBottom: 12, color: theme.colors.primary }}>{recipe.title}</Text>
-          <Text style={{ fontFamily: 'Lexend_700Bold', fontSize: 18, marginTop: 8, marginBottom: 4 }}>Ingredients:</Text>
+          <Text style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 26, marginBottom: 12, color: theme.colors.primary }}>{recipe.title}</Text>
+          <Text style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 20, marginTop: 8, marginBottom: 4 }}>Ingredients:</Text>
           {recipe.ingredients.map((ing: string, idx: number) => (
             <Text key={idx} style={{ fontFamily: 'AnonymousPro_400Regular', fontSize: 16, marginLeft: 8, marginBottom: 2 }}>• {ing}</Text>
           ))}
-          <Text style={{ fontFamily: 'Lexend_700Bold', fontSize: 18, marginTop: 14, marginBottom: 4 }}>Instructions:</Text>
+          <Text style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 20, marginTop: 14, marginBottom: 4 }}>Instructions:</Text>
           {recipe.instructions.map((step: string, idx: number) => (
             <Text key={idx} style={{ flexDirection: 'row', marginLeft: 8, marginBottom: 16, fontSize: 16 }}>
               <Text style={{ fontFamily: 'Lexend_700Bold', fontSize: 16 }}>{idx + 1}.</Text>
@@ -87,7 +88,7 @@ const RecipeTextScreen = () => {
         </View>
         <Portal>
           <Dialog visible={dialogVisible} onDismiss={() => setDialogVisible(false)} style={{ alignSelf: 'center', backgroundColor: theme.colors.elevation.level2, width: 260, borderRadius: 18, paddingVertical: 8, minHeight: 120, justifyContent: 'flex-end' }}>
-            <Dialog.Title style={{ color: theme.colors.primary, fontFamily: 'Lexend_700Bold', textAlign: 'center', fontSize: 18, marginBottom: 0, marginTop: 8, paddingBottom: 0 }}>Recipe saved!</Dialog.Title>
+            <Dialog.Title style={{ color: theme.colors.primary, fontFamily: FontFamilies.rubikBubbles, textAlign: 'center', fontSize: 20, marginBottom: 0, marginTop: 8, paddingBottom: 0 }}>Recipe saved!</Dialog.Title>
             <Dialog.Content style={{ paddingBottom: 48, marginBottom: 0 }}>
               <Text style={{ fontFamily: 'AnonymousPro_400Regular', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>You can find this recipe in your cookbook.</Text>
             </Dialog.Content>

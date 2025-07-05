@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Dimensions, Animated } from 'react-native';
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import FontFamilies from '../FontFamilies';
+import { useFonts, RubikBubbles_400Regular } from '@expo-google-fonts/rubik-bubbles';
 
 interface WelcomeScreenProps {
   onFinish: () => void;
@@ -19,6 +20,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
   const [instructionIndex, setInstructionIndex] = useState(0);
   const [buttonLabel, setButtonLabel] = useState('Get Started');
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [fontsLoaded] = useFonts({ RubikBubbles_400Regular });
+  const [screenOpacity] = useState(new Animated.Value(1));
 
   useEffect(() => {
     // After 5 seconds or when instructions finish, change button to 'Skip'
@@ -38,8 +41,22 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
     };
   }, [instructionIndex]);
 
+  if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: '#fff' }} />;
+
+  const handleGetStarted = () => {
+    Animated.timing(screenOpacity, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setTimeout(() => {
+        onFinish();
+      }, 200);
+    });
+  };
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: screenOpacity }]}> 
       <Video
         ref={videoRef}
         source={require('../assets/welcome.mp4')}
@@ -53,12 +70,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
         pointerEvents="none"
       />
       <Animated.View style={[styles.instructionOverlay, { opacity: fadeAnim }]}> 
-        <Text style={[styles.instructionText, { fontFamily: FontFamilies.lexendBold }]}>{INSTRUCTIONS[instructionIndex]}</Text>
+        <Text style={[styles.instructionText, { fontFamily: 'RubikBubbles_400Regular', fontWeight: undefined, fontStyle: undefined, color: '#fff' }]}>{INSTRUCTIONS[instructionIndex]}</Text>
       </Animated.View>
-      <TouchableOpacity style={styles.bottomButton} onPress={onFinish} activeOpacity={0.8}>
-        <Text style={styles.bottomButtonText}>{buttonLabel}</Text>
+      <TouchableOpacity style={styles.bottomButton} onPress={handleGetStarted} activeOpacity={0.8}>
+        <Text style={[styles.bottomButtonText, { fontFamily: 'RubikBubbles_400Regular', fontWeight: undefined, fontStyle: undefined, color: '#fff' }]}>{buttonLabel}</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -81,20 +98,20 @@ const styles = StyleSheet.create({
   instructionText: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold',
     textAlign: 'center',
     textShadowColor: 'rgba(0,0,0,0.4)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 8,
     letterSpacing: 1.2,
     marginBottom: 8,
+    fontFamily: 'RubikBubbles_400Regular',
   },
   bottomButton: {
     position: 'absolute',
     bottom: 48,
     left: '10%',
     right: '10%',
-    backgroundColor: '#FFD600',
+    backgroundColor: '#FFBFAE',
     borderRadius: 28,
     paddingVertical: 18,
     alignItems: 'center',
@@ -109,9 +126,8 @@ const styles = StyleSheet.create({
   bottomButtonText: {
     color: '#fff',
     fontSize: 22,
-    fontWeight: 'bold',
     letterSpacing: 1.2,
-    fontFamily: FontFamilies.lexendBold,
+    fontFamily: 'RubikBubbles_400Regular',
   },
 });
 

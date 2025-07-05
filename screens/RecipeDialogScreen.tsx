@@ -30,7 +30,7 @@ const RecipeView = () => {
     <View style={[styles.container, { backgroundColor: theme.colors.background }] }>
       <Appbar.Header elevated>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Recipe" titleStyle={{ fontFamily: FontFamilies.lexendBold, fontSize: 22, letterSpacing: 0.5 }} />
+        <Appbar.Content title="Recipe" titleStyle={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 26, letterSpacing: 0.5 }} />
         {recipe && recipe.id && (
           <Appbar.Action icon="menu-book-plus" onPress={saveRecipe} />
         )}
@@ -38,12 +38,12 @@ const RecipeView = () => {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <BlurView style={styles.blurCard} intensity={28} tint={theme.dark ? 'dark' : 'light'}>
           <View style={[styles.card, { backgroundColor: theme.colors.elevation.level2 }] }>
-            <Text style={styles.title}>{recipe?.title || 'Recipe'}</Text>
-            <Text style={styles.section}>Ingredients</Text>
+            <Text style={[styles.title, { fontFamily: FontFamilies.rubikBubbles, fontSize: 28 }]}>{recipe?.title || 'Recipe'}</Text>
+            <Text style={[styles.section, { fontFamily: FontFamilies.rubikBubbles, fontSize: 20 }]}>Ingredients</Text>
             {Array.isArray(recipe?.ingredients) && recipe.ingredients.map((item: string, idx: number) => (
               <Text key={idx} style={styles.ingredient}>• {item}</Text>
             ))}
-            <Text style={styles.section}>Instructions</Text>
+            <Text style={[styles.section, { fontFamily: FontFamilies.rubikBubbles, fontSize: 20 }]}>Instructions</Text>
             {Array.isArray(recipe?.instructions) && recipe.instructions.map((step: string, idx: number) => (
               <Text key={idx} style={styles.instruction}>{idx + 1}. {step}</Text>
             ))}

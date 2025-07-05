@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, ActivityIndicator, ScrollView, useWindowDimensions, Image, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
-import { Appbar, Card, Button, TextInput, Text, useTheme, Chip, Portal, Dialog, IconButton } from 'react-native-paper';
+import { Appbar, Card, Button, TextInput, Text, useTheme, Chip, Portal, Dialog, IconButton, FAB } from 'react-native-paper';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import ImageCarousel from '../components/ImageCarousel';
@@ -23,6 +23,29 @@ const STAPLE_INGREDIENTS = ['Oil', 'Flour', 'Salt', 'Butter', 'Sugar'];
 const CUISINES = ['Italian', 'Mexican', 'Japanese', 'Indian', 'French'];
 const DIETARY = ['Vegan', 'Gluten-Free', 'Nut-Free', 'Dairy-Free', 'Vegetarian'];
 const STORAGE_KEY = 'SAVED_RECIPES';
+
+const STAPLE_COLORS: { [key: string]: { background: string; text: string } } = {
+  Oil: { background: '#FFF5B7', text: '#7A6A01' },      // Light yellow
+  Flour: { background: '#E0C3A3', text: '#6B4F1D' },    // Wheat beige
+  Salt: { background: '#D6EFFF', text: '#1A3A5A' },     // Pale blue
+  Butter: { background: '#FFE6A7', text: '#7A5A01' },   // Butter yellow
+  Sugar: { background: '#FFD6E0', text: '#7A1A3A' },    // Pink sugar
+};
+const DIETARY_COLORS: { [key: string]: { background: string; text: string } } = {
+  Vegan: { background: '#B5EAD7', text: '#1A4D3A' },         // Mint green
+  'Gluten-Free': { background: '#F7D6E0', text: '#7A1A3A' }, // Light pink
+  'Nut-Free': { background: '#FFF5B7', text: '#7A6A01' },    // Light yellow
+  'Dairy-Free': { background: '#A7E4F7', text: '#00334A' },  // Sky blue
+  Vegetarian: { background: '#FFB6B9', text: '#7A1A1A' },    // Soft pink
+};
+
+const CUISINE_COLORS: { [key: string]: { background: string; text: string } } = {
+  Italian: { background: '#FFD36E', text: '#7A4F01' },    // Sunny yellow
+  Mexican: { background: '#FF8C70', text: '#7A2E00' },    // Coral orange
+  Japanese: { background: '#A7E4F7', text: '#00334A' },   // Sky blue
+  Indian: { background: '#FFB6B9', text: '#7A1A1A' },     // Soft pink
+  French: { background: '#B5EAD7', text: '#1A4D3A' },     // Mint green
+};
 
 function buildPrompt(staples: string[], cuisines: string[], dietary: string[], context: string): string {
     // Example 1: Vegan Pasta
@@ -83,10 +106,10 @@ const PromptScreen = () => {
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
   const [context, setContext] = useState('');
-  const [showPrompt, setShowPrompt] = useState(false);
   const [loading, setLoading] = useState(false);
   const [inputWarning, setInputWarning] = useState(false);
   const [detectedIngredients, setDetectedIngredients] = useState<string[]>([]);
+  const [detectedLabels, setDetectedLabels] = useState<string[]>([]);
   const [selectedDetectedIngredients, setSelectedDetectedIngredients] = useState<string[]>([]);
   const [showChipsEditor, setShowChipsEditor] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
@@ -155,8 +178,9 @@ const PromptScreen = () => {
       const fileUri = `${FileSystem.cacheDirectory}camera_capture_${uniqueId}.jpg`;
       await FileSystem.writeAsStringAsync(fileUri, base64, { encoding: FileSystem.EncodingType.Base64 });
       setCapturedImage(fileUri);
-      const detected = await detectIngredientsFromImage(fileUri);
-      setDetectedIngredients(detected);
+      const { ingredients, labels } = await detectIngredientsFromImage(fileUri);
+      setDetectedIngredients(ingredients);
+      setDetectedLabels(labels);
       setShowChipsEditor(true);
       setVisionLoading(false);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -289,7 +313,7 @@ const PromptScreen = () => {
                   color: '#6C47FF',
                   fontWeight: '600',
                   textAlign: 'center',
-                  fontFamily: FontFamilies.lexendBold,
+                  fontFamily: FontFamilies.rubikBubbles,
                   letterSpacing: 1.5,
                   minWidth: 90,
                 }}
@@ -311,9 +335,7 @@ const PromptScreen = () => {
           </BlurView>
         )}
       <Appbar.Header elevated>
-          <Appbar.Content title="Create Recipe" titleStyle={{ fontFamily: FontFamilies.lexendBold, fontSize: 22, letterSpacing: 0.5 }} />
-        <IconButton icon="refresh" onPress={handleReset} accessibilityLabel="Reset prompt" />
-        <IconButton icon="eye" onPress={() => setShowPrompt(true)} accessibilityLabel="Show full prompt" />
+        <Appbar.Content title="Create Recipe" titleStyle={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 26, letterSpacing: 0.5 }} />
       </Appbar.Header>
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -353,7 +375,7 @@ const PromptScreen = () => {
                     icon="camera"
                     onPress={() => setShowCamera(true)}
                     style={{ marginBottom: 16, borderRadius: 18, height: 76, justifyContent: 'center', alignItems: 'center', width: '100%', paddingHorizontal: 12 }}
-                    labelStyle={{ fontFamily: FontFamilies.lexendBold, fontSize: 20, lineHeight: 26, letterSpacing: 0.5, textAlign: 'center', flexGrow: 1, flexShrink: 1 }}
+                    labelStyle={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 20, lineHeight: 26, letterSpacing: 0.5, textAlign: 'center', flexGrow: 1, flexShrink: 1 }}
                     contentStyle={{ height: 76, paddingVertical: 8 }}
                     disabled={visionLoading}
                   >
@@ -370,42 +392,90 @@ const PromptScreen = () => {
                 <ImageCarousel images={images} onChange={handleImageChange} />
                 <Text style={styles.label}>Staple Ingredients</Text>
                 <View style={styles.chipRow}>
-                  {STAPLE_INGREDIENTS.map(item => (
-                    <Chip
-                      key={item}
-                      selected={selectedStaples.includes(item)}
-                      onPress={() => handleChipToggle(item, selectedStaples, setSelectedStaples)}
-                      style={styles.chip}
-                    >
-                      {item}
-                    </Chip>
-                  ))}
+                  {STAPLE_INGREDIENTS.map(item => {
+                    const isSelected = selectedStaples.includes(item);
+                    return (
+                      <Chip
+                        key={item}
+                        selected={isSelected}
+                        onPress={() => handleChipToggle(item, selectedStaples, setSelectedStaples)}
+                        style={[
+                          styles.chip,
+                          {
+                            backgroundColor: isSelected
+                              ? STAPLE_COLORS[item]?.background || '#FFF'
+                              : '#F0E5D9',
+                          },
+                        ]}
+                        textStyle={{
+                          color: isSelected
+                            ? STAPLE_COLORS[item]?.text || '#333'
+                            : '#B0A8A0',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {item}
+                      </Chip>
+                    );
+                  })}
                 </View>
                 <Text style={styles.label}>Cuisine Preferences</Text>
                 <View style={styles.chipRow}>
-                  {CUISINES.map(item => (
-                    <Chip
-                      key={item}
-                      selected={selectedCuisines.includes(item)}
-                      onPress={() => handleChipToggle(item, selectedCuisines, setSelectedCuisines)}
-                      style={styles.chip}
-                    >
-                      {item}
-                    </Chip>
-                  ))}
+                  {CUISINES.map(item => {
+                    const isSelected = selectedCuisines.includes(item);
+                    return (
+                      <Chip
+                        key={item}
+                        selected={isSelected}
+                        onPress={() => handleChipToggle(item, selectedCuisines, setSelectedCuisines)}
+                        style={[
+                          styles.chip,
+                          {
+                            backgroundColor: isSelected
+                              ? CUISINE_COLORS[item]?.background || '#FFF'
+                              : '#F0E5D9', // neutral/disabled background
+                          },
+                        ]}
+                        textStyle={{
+                          color: isSelected
+                            ? CUISINE_COLORS[item]?.text || '#333'
+                            : '#B0A8A0', // muted text when not selected
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {item}
+                      </Chip>
+                    );
+                  })}
                 </View>
                 <Text style={styles.label}>Dietary Restrictions</Text>
                 <View style={styles.chipRow}>
-                  {DIETARY.map(item => (
-                    <Chip
-                      key={item}
-                      selected={selectedDietary.includes(item)}
-                      onPress={() => handleChipToggle(item, selectedDietary, setSelectedDietary)}
-                      style={styles.chip}
-                    >
-                      {item}
-                    </Chip>
-                  ))}
+                  {DIETARY.map(item => {
+                    const isSelected = selectedDietary.includes(item);
+                    return (
+                      <Chip
+                        key={item}
+                        selected={isSelected}
+                        onPress={() => handleChipToggle(item, selectedDietary, setSelectedDietary)}
+                        style={[
+                          styles.chip,
+                          {
+                            backgroundColor: isSelected
+                              ? DIETARY_COLORS[item]?.background || '#FFF'
+                              : '#F0E5D9',
+                          },
+                        ]}
+                        textStyle={{
+                          color: isSelected
+                            ? DIETARY_COLORS[item]?.text || '#333'
+                            : '#B0A8A0',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {item}
+                      </Chip>
+                    );
+                  })}
                 </View>
                 <Text style={styles.label}>Additional Context</Text>
                 <TextInput
@@ -431,7 +501,7 @@ const PromptScreen = () => {
                         handleGenerateRecipe();
                       }}
                       style={[styles.button, { height: 76, width: '100%', borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginTop: 12, paddingHorizontal: 12 }]}
-                      labelStyle={{ fontFamily: FontFamilies.lexendBold, fontSize: 20, lineHeight: 26, letterSpacing: 0.5, textAlign: 'center', flexGrow: 1, flexShrink: 1 }}
+                      labelStyle={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 20, lineHeight: 26, letterSpacing: 0.5, textAlign: 'center', flexGrow: 1, flexShrink: 1 }}
                       contentStyle={{ height: 76, paddingVertical: 8 }}
                       disabled={loading || isInputEmpty}
                     >
@@ -443,42 +513,19 @@ const PromptScreen = () => {
         </View>
       </ScrollView>
         </View>
-      <Portal>
-        <Dialog visible={showPrompt} onDismiss={() => setShowPrompt(false)}>
-          <Dialog.Title>Full Prompt Preview</Dialog.Title>
-          <Dialog.Content>
-            <Text style={{ fontFamily: 'AnonymousPro_400Regular' }}>{promptText}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setShowPrompt(false)}>Close</Button>
-          </Dialog.Actions>
-        </Dialog>
-        <Dialog visible={inputWarning} onDismiss={() => setInputWarning(false)} style={{ backgroundColor: theme.colors.elevation.level2 }}>
-          <Dialog.Icon icon="alert-circle" />
-          <Dialog.Title>Input Required</Dialog.Title>
-          <Dialog.Content>
-            <Text style={{ fontFamily: 'AnonymousPro_400Regular', color: theme.colors.onSurface }}>
-              Please select at least one ingredient, cuisine, dietary restriction, add context, or an image before generating a recipe.
-            </Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setInputWarning(false)} style={{ borderRadius: 12 }}>OK</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
         {(parsedRecipe || plainTextOutput) && (
           <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, flexGrow: 1 }}>
             {parsedRecipe ? (
               <>
                 <View style={{ backgroundColor: theme.colors.elevation.level2, borderRadius: 12, padding: 16 }}>
-                  <Text style={{ fontFamily: 'Lexend_700Bold', fontSize: 26, marginBottom: 12, color: theme.colors.primary }}>{parsedRecipe.title}</Text>
-                  <Text style={{ fontFamily: 'Lexend_700Bold', fontSize: 18, marginTop: 8, marginBottom: 4 }}>Ingredients:</Text>
+                  <Text style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 26, marginBottom: 12, color: theme.colors.primary }}>{parsedRecipe.title}</Text>
+                  <Text style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 20, marginTop: 8, marginBottom: 4 }}>Ingredients:</Text>
                   {parsedRecipe.ingredients.map((ing: string, idx: number) => (
-                    <Text key={idx} style={{ fontFamily: 'AnonymousPro_400Regular', fontSize: 16, marginLeft: 8, marginBottom: 2 }}>• {ing}</Text>
+                    <Text key={idx} style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 16, marginLeft: 8, marginBottom: 2 }}>• {ing}</Text>
                   ))}
-                  <Text style={{ fontFamily: 'Lexend_700Bold', fontSize: 18, marginTop: 14, marginBottom: 4 }}>Instructions:</Text>
+                  <Text style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 20, marginTop: 14, marginBottom: 4 }}>Instructions:</Text>
                   {parsedRecipe.instructions.map((step: string, idx: number) => (
-                    <Text key={idx} style={{ fontFamily: 'AnonymousPro_400Regular', fontSize: 16, marginLeft: 8, marginBottom: 2 }}>{idx + 1}. {step}</Text>
+                    <Text key={idx} style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 16, marginLeft: 8, marginBottom: 2 }}>{idx + 1}. {step}</Text>
                   ))}
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 18 }}>
@@ -492,7 +539,7 @@ const PromptScreen = () => {
               </>
             ) : (
               <View style={{ backgroundColor: theme.colors.elevation.level2, borderRadius: 12, padding: 16 }}>
-                <Text selectable style={{ fontFamily: 'AnonymousPro_400Regular', fontSize: 16, color: theme.colors.onSurface }}>
+                <Text selectable style={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 16, color: theme.colors.onSurface }}>
                   {plainTextOutput}
                 </Text>
               </View>
@@ -500,6 +547,13 @@ const PromptScreen = () => {
           </ScrollView>
         )}
     </View>
+    <FAB
+      style={{ position: 'absolute', right: 24, bottom: 32, backgroundColor: theme.colors.primary }}
+      icon="refresh"
+      label="Reload"
+      onPress={handleReset}
+      color={theme.colors.onPrimary}
+    />
     </SafeAreaView>
   );
 };

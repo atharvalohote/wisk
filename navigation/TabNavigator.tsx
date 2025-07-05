@@ -6,6 +6,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from 'react-native-paper';
 import * as Haptics from 'expo-haptics';
+import AppColors from '../AppColors';
+import { AppColorsDark } from '../AppColors';
 
 const TAB_ICONS = {
   create: {
@@ -36,17 +38,18 @@ const TabNavigator = () => {
     { key: 'settings', title: 'Settings', icon: 'cog' },
   ]);
   const theme = useTheme();
+  const isDark = theme.dark;
 
   const renderIcon = ({ route, focused, color }: { route: { key: TabKey }, focused: boolean, color: string }) => {
     const iconName = focused ? TAB_ICONS[route.key].filled : TAB_ICONS[route.key].outline;
     return (
-    <MaterialCommunityIcons
+      <MaterialCommunityIcons
         name={iconName as any}
-      color={color}
-        size={28}
-        style={{ alignSelf: 'center' }}
-    />
-  );
+        color={color}
+        size={24}
+        style={{ alignSelf: 'center', marginTop: 0, marginBottom: 2 }}
+      />
+    );
   };
 
   const handleIndexChange = (i: number) => {
@@ -70,15 +73,15 @@ const TabNavigator = () => {
       sceneAnimationEnabled={false}
       barStyle={{
         backgroundColor: theme.colors.elevation.level2,
-        height: 80,
+        height: 64,
         justifyContent: 'center',
         shadowColor: 'transparent',
         elevation: 0,
         borderTopWidth: 0,
       }}
       labeled={true}
-      activeColor={theme.colors.primary}
-      inactiveColor={theme.colors.onSurface}
+      activeColor={isDark ? AppColorsDark.navIcon : '#2A1C14'}
+      inactiveColor={isDark ? AppColorsDark.navIcon : '#2A1C14'}
     />
   );
 };

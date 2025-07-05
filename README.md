@@ -1,30 +1,42 @@
-# Wisk
+<p align="center">
+  <img src="assets/icon-1024.png" alt="Wisk App Icon" width="128" />
+</p>
 
-Wisk is a cross-platform mobile app that generates personalized recipes from your ingredients and photos. Powered by AI and modern Material 3 design, Wisk makes cooking fun, easy, and beautiful.
+# 🍳 Wisk
 
-## Features
-- Generate recipes using Google Gemini AI
-- Detect ingredients from photos with Google Vision API
-- Beautiful Material 3 UI with pink, peach, and yellow accents
-- Camera capture and image carousel
-- Persistent cookbook storage (local, with Firestore planned)
-- Markdown recipe display
-- Haptic feedback and blur effects for delightful UX
-- Custom fonts and branded background
+Wisk is a modern, cross-platform mobile app that generates personalized recipes from your ingredients and photos. Powered by AI and designed with Material 3, Wisk makes cooking fun, easy, and beautiful.
 
-## Technologies Used
-- React Native (TypeScript)
-- Expo (Camera, Video, Blur, Haptics, Font)
-- React Native Paper (Material 3 UI)
-- React Navigation
-- Google Gemini API
-- Google Vision API
-- AsyncStorage
-- Firebase Firestore (planned)
-- React Native Markdown Display
-- Git/GitHub
+---
 
-## Getting Started
+## ✨ Features
+
+- 🤖 Generate recipes using **Google Gemini AI**
+- 📸 Detect ingredients from photos with **Google Vision API**
+- 🎨 Gorgeous Material 3 UI with pink, peach, and yellow accents
+- 📷 Camera capture & image carousel
+- 📚 Persistent cookbook storage (local, with Firestore planned)
+- 📝 Markdown recipe display
+- 🎉 Haptic feedback & blur effects for delightful UX
+- 🔤 Custom fonts & branded backgrounds
+
+---
+
+## 🛠️ Technologies Used
+
+- **React Native** (TypeScript)
+- **Expo** (Camera, Video, Blur, Haptics, Font)
+- **React Native Paper** (Material 3 UI)
+- **React Navigation**
+- **Google Gemini API**
+- **Google Vision API**
+- **AsyncStorage**
+- **Firebase Firestore** (planned)
+- **React Native Markdown Display**
+- **Git/GitHub**
+
+---
+
+## 🚀 Getting Started
 
 1. **Clone the repo:**
    ```sh
@@ -45,12 +57,24 @@ Wisk is a cross-platform mobile app that generates personalized recipes from you
    ```
    Scan the QR code with Expo Go or run on an emulator.
 
-## Screenshots
-_Add screenshots here if available._
+---
 
-## Credits
-- Developed by Atharva Lohote
-- Powered by Google Gemini and Vision APIs
+## 🖼️ Screenshots
 
-## License
+<p align="center">
+  <img src="assets/screenshot1.png" alt="Wisk Screenshot 1" width="250"/>
+  <img src="assets/screenshot2.png" alt="Wisk Screenshot 2" width="250"/>
+  <img src="assets/screenshot3.png" alt="Wisk Screenshot 3" width="250"/>
+  <!-- Add more screenshots as needed -->
+</p>
+
+---
+
+## 👨‍💻 Credits
+- Developed by **Atharva Lohote**
+- Powered by **Google Gemini** and **Vision APIs**
+
+---
+
+## 📄 License
 This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details. 
