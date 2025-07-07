@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="wisk github.png" alt="Wisk App Icon" width="128" />
+  <img src="wisk github.png" alt="Wisk App Intro" />
 </p>
 
 # 🍳 Wisk
