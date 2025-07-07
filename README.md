@@ -19,7 +19,7 @@ Wisk is a modern, cross-platform mobile app that generates personalized recipes 
   <a href="https://youtube.com/shorts/NM-ulsPWtME?feature=share" target="_blank">
     <img src="https://img.shields.io/badge/Watch%20Demo-YouTube-red?style=for-the-badge&logo=youtube" alt="Watch Demo on YouTube" width="200"/>
   </a>
-  &nbsp;&nbsp;&nbsp;&nbsp; <a href="YOUR_ACTUAL_DIRECT_DOWNLOAD_LINK_HERE" download>
+  &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://drive.google.com/file/d/1-3X71EQM_6ft5Gg94OhgOLh2-z827-o4/view?usp=share_link" download>
     <img src="https://img.shields.io/badge/Download%20Wisk-App-success?style=for-the-badge&logo=android" alt="Download Wisk App" width="200"/>
   </a>
 </p>
