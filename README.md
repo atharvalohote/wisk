@@ -21,6 +21,16 @@ Wisk is a modern, cross-platform mobile app that generates personalized recipes 
 
 ---
 
+## 🚀 Demo
+
+<p align="center">
+  <video src="YOUR_VIDEO_URL_HERE" controls muted loop width="350"></video>
+</p>
+
+*A quick demonstration of Wisk in action, showing how to generate recipes from ingredients.*
+
+---
+
 ## 🛠️ Technologies Used
 
 - **React Native** (TypeScript)
@@ -40,41 +50,5 @@ Wisk is a modern, cross-platform mobile app that generates personalized recipes 
 
 1. **Clone the repo:**
    ```sh
-   git clone https://github.com/atharvalohote/wisk.git
+   git clone [https://github.com/atharvalohote/wisk.git](https://github.com/atharvalohote/wisk.git)
    cd wisk
-   ```
-2. **Install dependencies:**
-   ```sh
-   npm install
-   # or
-   yarn install
-   ```
-3. **Set up API keys:**
-   - Add your Google Gemini and Vision API keys in `app.json` under `extra`.
-4. **Run the app:**
-   ```sh
-   npx expo start
-   ```
-   Scan the QR code with Expo Go or run on an emulator.
-
----
-
-## 🖼️ Screenshots
-
-<p align="center">
-  <img src="assets/screenshot1.png" alt="Wisk Screenshot 1" width="250"/>
-  <img src="assets/screenshot2.png" alt="Wisk Screenshot 2" width="250"/>
-  <img src="assets/screenshot3.png" alt="Wisk Screenshot 3" width="250"/>
-  <!-- Add more screenshots as needed -->
-</p>
-
----
-
-## 👨‍💻 Credits
-- Developed by **Atharva Lohote**
-- Powered by **Google Gemini** and **Vision APIs**
-
----
-
-## 📄 License
-This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details. 
