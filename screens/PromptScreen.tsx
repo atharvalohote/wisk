@@ -297,7 +297,11 @@ const PromptScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
-      <View style={[styles.container, { backgroundColor: 'transparent', flex: 1 }] }>
+      <KeyboardAvoidingView
+        style={[styles.container, { backgroundColor: 'transparent', flex: 1 }]}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
         {/* Processing Animation Overlay */}
         {loading && (
           <BlurView
@@ -353,9 +357,9 @@ const PromptScreen = () => {
             </View>
           </BlurView>
         )}
-      <Appbar.Header elevated>
-        <Appbar.Content title="Create Recipe" titleStyle={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 26, letterSpacing: 0.5 }} />
-      </Appbar.Header>
+        <Appbar.Header elevated>
+          <Appbar.Content title="Create Recipe" titleStyle={{ fontFamily: FontFamilies.rubikBubbles, fontSize: 26, letterSpacing: 0.5 }} />
+        </Appbar.Header>
         <View style={{ flex: 1 }}>
           <ScrollView
             ref={scrollViewRef}
