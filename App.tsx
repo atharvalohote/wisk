@@ -8,6 +8,8 @@ import { useFonts as useRubikBubblesFonts, RubikBubbles_400Regular } from '@expo
 import RecipeView from './screens/RecipeDialogScreen';
 import RecipeTextScreen from './screens/RecipeTextScreen';
 import WelcomeScreen from './components/WelcomeScreen';
+import AuthScreen from './screens/AuthScreen';
+import AuthGuard from './components/AuthGuard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext, HapticsContext } from './Contexts';
 import AppColors from './AppColors';
