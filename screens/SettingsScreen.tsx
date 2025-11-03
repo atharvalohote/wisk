@@ -106,13 +106,34 @@ const SettingsScreen = () => {
               ]} intensity={24} tint={theme.dark ? 'dark' : 'light'}>
                 <Card style={[styles.card, { backgroundColor: theme.colors.elevation.level2, width: '100%', alignSelf: 'stretch', elevation: 0, shadowColor: 'transparent' }] }>
                   <Card.Content>
+                    {/* User Profile Section */}
+                    {currentUser && (
+                      <>
+                        <View style={styles.profileSection}>
+                          <Avatar.Icon
+                            size={60}
+                            icon="account"
+                            style={{ backgroundColor: '#FFBFAE' }}
+                          />
+                          <View style={styles.profileText}>
+                            <Text style={[styles.userName, { fontFamily: FontFamilies.rubikBubbles }]}>
+                              {currentUser.displayName || 'User'}
+                            </Text>
+                            <Text style={styles.userEmail}>{currentUser.email}</Text>
+                          </View>
+                        </View>
+                        <Divider style={styles.divider} />
+                      </>
+                    )}
+
+                    {/* App Settings */}
                     <List.Item
                       title="Dark Theme"
                       titleStyle={[styles.text, { fontFamily: FontFamilies.rubikBubbles, fontSize: 20 }]}
                       right={() => (
-                        <Switch 
-                          value={isDark} 
-                          onValueChange={handleThemeToggle} 
+                        <Switch
+                          value={isDark}
+                          onValueChange={handleThemeToggle}
                           color={theme.colors.primary}
                           accessibilityLabel="Toggle dark theme"
                         />
@@ -122,17 +143,33 @@ const SettingsScreen = () => {
                       title="Enable Haptics"
                       titleStyle={[styles.text, { fontFamily: FontFamilies.rubikBubbles, fontSize: 20 }]}
                       right={() => (
-                        <Switch 
-                          value={hapticsEnabled} 
-                          onValueChange={handleHapticsToggle} 
+                        <Switch
+                          value={hapticsEnabled}
+                          onValueChange={handleHapticsToggle}
                           color={theme.colors.primary}
                           accessibilityLabel="Toggle haptics"
                         />
                       )}
                     />
-                    <Button mode="outlined" onPress={handleClearRecipes} style={styles.button} labelStyle={styles.text}>
+                    <Divider style={styles.divider} />
+
+                    {/* Data Management */}
+                    <Button mode="outlined" onPress={handleClearRecipes} style={[styles.button, { marginBottom: 12 }]} labelStyle={styles.text}>
                       Clear Cookbook
                     </Button>
+
+                    {/* Authentication */}
+                    {currentUser && (
+                      <Button
+                        mode="contained"
+                        onPress={handleLogout}
+                        style={[styles.button, styles.logoutButton]}
+                        labelStyle={[styles.text, { color: 'white' }]}
+                        buttonColor="#d32f2f"
+                      >
+                        Sign Out
+                      </Button>
+                    )}
                   </Card.Content>
                 </Card>
               </BlurView>
