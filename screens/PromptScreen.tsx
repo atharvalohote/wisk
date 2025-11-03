@@ -108,6 +108,8 @@ const PromptScreen = () => {
   const [context, setContext] = useState('');
   const [loading, setLoading] = useState(false);
   const [inputWarning, setInputWarning] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [detectedIngredients, setDetectedIngredients] = useState<string[]>([]);
   const [detectedLabels, setDetectedLabels] = useState<string[]>([]);
   const [selectedDetectedIngredients, setSelectedDetectedIngredients] = useState<string[]>([]);
