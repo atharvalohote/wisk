@@ -580,6 +580,7 @@ const PromptScreen = () => {
       onPress={handleReset}
       color={theme.colors.onPrimary}
     />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
