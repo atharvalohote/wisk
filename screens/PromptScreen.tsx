@@ -508,13 +508,16 @@ const PromptScreen = () => {
                   mode="outlined"
                   multiline
                   numberOfLines={3}
-                  style={{ marginBottom: 16, fontFamily: 'AnonymousPro_400Regular' }}
+                  style={{ marginBottom: 16, backgroundColor: 'white' }}
+                  textColor="#333"
+                  cursorColor="#6C47FF"
+                  selectionColor="#6C47FF"
                       onFocus={() => {
                         setTimeout(() => {
                           scrollViewRef.current?.scrollToEnd({ animated: true });
-                        }, 200);
+                        }, 300);
                       }}
-                />
+                    />
                     <Button
                       mode="contained"
                       buttonColor="#EC4899"
