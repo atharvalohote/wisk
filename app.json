@@ -1,36 +1,55 @@
 {
   "expo": {
-    "name": "Wisk",
-    "slug": "Wisk",
-    "version": "1.1.2",
+    "name": "Wisk - AI Recipe Generator",
+    "slug": "wisk-ai-recipe",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon-1024.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splashscreen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFBFAE"
     },
     "ios": {
       "supportsTablet": true,
-      "icon": "./assets/icon-1024.png"
+      "icon": "./assets/icon-1024.png",
+      "bundleIdentifier": "com.yourcompany.wisk",
+      "buildNumber": "1.2.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Wisk needs camera access to scan ingredients and generate recipes.",
+        "NSPhotoLibraryUsageDescription": "Wisk needs photo library access to select ingredient images."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon-foreground.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#FFBFAE"
       },
       "icon": "./assets/icon-1024.png",
       "edgeToEdgeEnabled": true,
-      "package": "com.atharva7709.wisk"
+      "package": "com.yourcompany.wisk",
+      "versionCode": 120,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font",
-      "expo-video"
+      "expo-video",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Wisk to access your camera to scan ingredients and generate recipes."
+        }
+      ]
     ],
     "extra": {
       "GEMINI_API_KEY": "your api key",
@@ -39,6 +58,9 @@
         "projectId": "your project id"
       }
     },
-    "owner": "atharva7709"
+    "owner": "yourcompany",
+    "description": "AI-powered recipe generator that creates delicious recipes from your ingredients. Scan ingredients with your camera or enter them manually to get instant recipe suggestions.",
+    "primaryColor": "#FFBFAE",
+    "scheme": "wisk"
   }
 }
