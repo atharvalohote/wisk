@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet, useWindowDimensions, ScrollView } from 'react-native';
-import { Appbar, Card, Switch, List, useTheme, Button } from 'react-native-paper';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet, useWindowDimensions, ScrollView, Alert } from 'react-native';
+import { Appbar, Card, Switch, List, useTheme, Button, Avatar, Divider, Text } from 'react-native-paper';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontFamilies from '../FontFamilies';
 import { ThemeContext, HapticsContext } from '../Contexts';
 import { BlurView } from 'expo-blur';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthService from '../services/AuthService';
+import { useNavigation } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 
 const STORAGE_KEY = 'SAVED_RECIPES';
 
