@@ -28,6 +28,10 @@ export default function App() {
       setIsDark(dark === 'true');
       const haptics = await AsyncStorage.getItem('HAPTICS_ENABLED');
       setHapticsEnabled(haptics !== 'false');
+
+      // Check if welcome screen was shown before
+      const welcomeShown = await AsyncStorage.getItem('WELCOME_SHOWN');
+      setShowWelcome(welcomeShown !== 'true');
     })();
   }, []);
 
