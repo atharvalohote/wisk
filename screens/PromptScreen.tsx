@@ -18,6 +18,8 @@ import FontFamilies from '../FontFamilies';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { v4 as uuidv4 } from 'uuid';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthService from '../services/AuthService';
+import { saveSavedRecipe } from '../services/FirestoreService';
 
 const STAPLE_INGREDIENTS = ['Oil', 'Flour', 'Salt', 'Butter', 'Sugar'];
 const CUISINES = ['Italian', 'Mexican', 'Japanese', 'Indian', 'French'];
