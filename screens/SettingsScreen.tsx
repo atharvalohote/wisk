@@ -18,6 +18,9 @@ const SettingsScreen = () => {
   const { width } = useWindowDimensions();
   const { isDark, setIsDark } = useContext(ThemeContext);
   const { hapticsEnabled, setHapticsEnabled } = useContext(HapticsContext);
+  const navigation = useNavigation();
+
+  const currentUser = AuthService.currentUser;
 
   const handleThemeToggle = async () => {
     Haptics.selectionAsync();
