@@ -81,7 +81,12 @@ export default function App() {
         <PaperProvider theme={paperTheme}>
           <NavigationContainer theme={navTheme}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="MainTabs" component={TabNavigator} />
+              <Stack.Screen name="AuthScreen" component={AuthScreen} />
+              <Stack.Screen name="MainTabs" component={() => (
+                <AuthGuard>
+                  <TabNavigator />
+                </AuthGuard>
+              )} />
               <Stack.Screen name="RecipeView" component={RecipeView} />
               <Stack.Screen name="RecipeTextScreen" component={RecipeTextScreen} />
             </Stack.Navigator>
