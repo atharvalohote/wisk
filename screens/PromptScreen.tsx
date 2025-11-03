@@ -286,14 +286,37 @@ const PromptScreen = () => {
 
   const handleSaveRecipe = async () => {
     if (!parsedRecipe) return;
+
     try {
+      const currentUser = AuthService.currentUser;
+      const newRecipe = {
+        title: parsedRecipe.title,
+        text: JSON.stringify(parsedRecipe, null, 2)
+      };
+
+      // Save to local AsyncStorage for immediate availability
       const data = await AsyncStorage.getItem(STORAGE_KEY);
-      const recipes = data ? JSON.parse(data) : [];
-      const newRecipe = { id: uuidv4(), title: parsedRecipe.title, text: JSON.stringify(parsedRecipe, null, 2) };
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([newRecipe, ...recipes]));
-      alert('Recipe saved!');
+      const localRecipes = data ? JSON.parse(data) : [];
+      const recipeWithId = { id: uuidv4(), ...newRecipe };
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([recipeWithId, ...localRecipes]));
+
+      // Save to Firestore if user is authenticated
+      if (currentUser) {
+        try {
+          await saveSavedRecipe(newRecipe, currentUser.uid);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          alert('Recipe saved to cloud and device!');
+        } catch (cloudError) {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          alert('Recipe saved to device only. Cloud sync failed. Your recipes will sync when you\'re back online.');
+        }
+      } else {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        alert('Recipe saved to device! Sign in to sync across devices.');
+      }
     } catch (e) {
-      alert('Failed to save recipe.');
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      alert('Failed to save recipe. Please try again.');
     }
   };
 
