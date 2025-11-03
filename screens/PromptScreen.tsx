@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, ActivityIndicator, ScrollView, useWindowDimensions, Image, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, ScrollView, useWindowDimensions, Image, KeyboardAvoidingView, Platform, Keyboard, Dimensions } from 'react-native';
 import { Appbar, Card, Button, TextInput, Text, useTheme, Chip, Portal, Dialog, IconButton, FAB } from 'react-native-paper';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
