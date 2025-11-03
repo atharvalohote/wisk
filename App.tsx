@@ -62,7 +62,10 @@ export default function App() {
   }
 
   // Fade out WelcomeScreen and unmount after animation
-  const handleWelcomeFinish = () => {
+  const handleWelcomeFinish = async () => {
+    // Save that welcome screen was shown
+    await AsyncStorage.setItem('WELCOME_SHOWN', 'true');
+
     Animated.timing(welcomeOpacity, {
       toValue: 0,
       duration: 500,
