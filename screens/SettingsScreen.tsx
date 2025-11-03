@@ -224,6 +224,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignSelf: 'center',
   },
+  logoutButton: {
+    marginTop: 8,
+  },
   outerScrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -232,6 +235,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     width: '100%',
     alignSelf: 'stretch',
+  },
+  profileSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  profileText: {
+    flex: 1,
+    marginLeft: 16,
+  },
+  userName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  userEmail: {
+    fontSize: 14,
+    opacity: 0.7,
+  },
+  divider: {
+    marginVertical: 16,
   },
 });
 
