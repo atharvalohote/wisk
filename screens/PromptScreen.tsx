@@ -137,6 +137,23 @@ const PromptScreen = () => {
     }
   }, [loading]);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
+      setKeyboardVisible(true);
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   const handleChipToggle = (item: string, selected: string[], setSelected: (v: string[]) => void) => {
     if (selected.includes(item)) {
       setSelected(selected.filter(i => i !== item));
